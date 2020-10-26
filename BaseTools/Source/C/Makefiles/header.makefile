@@ -89,20 +89,23 @@ ifndef HOST_ARCH
   $(error HOST_ARCH is not defined!)
 endif
 
-#Set up BaseTools binary path for Windows builds
-ifeq (Windows, $(findstring Windows,$(MAKE_HOST)))
-  ifndef BIN_PATH
-    BIN_PATH_BASE=$(MAKEROOT)/../../Bin
-    ifeq ($(HOST_ARCH),X64)
-      BIN_PATH=$(BIN_PATH_BASE)/Win64
-    else
-      ifeq ($(HOST_ARCH),AARCH64)
-        BIN_PATH=$(BIN_PATH_BASE)/Win64
-      else
-        BIN_PATH=$(BIN_PATH_BASE)/Win32
-      endif
-    endif
-  endif
+CYGWIN:=$(findstring CYGWIN, $(shell uname -s))
+LINUX:=$(findstring Linux, $(shell uname -s))
+DARWIN:=$(findstring Darwin, $(shell uname -s))
+SUNOS:=$(findstring SunOS, $(shell uname -s))
+
+ifeq ($(CXX), llvm)
+BUILD_CC ?= $(CLANG_BIN)clang
+BUILD_CXX ?= $(CLANG_BIN)clang++
+BUILD_AS ?= $(CLANG_BIN)clang
+BUILD_AR ?= $(CLANG_BIN)llvm-ar
+BUILD_LD ?= $(CLANG_BIN)llvm-ld
+else
+BUILD_CC ?= gcc
+BUILD_CXX ?= g++
+BUILD_AS ?= gcc
+BUILD_AR ?= ar
+BUILD_LD ?= ld
 endif
 
 ifneq ($(findstring cmd,$(SHELL)),cmd)
@@ -190,6 +193,15 @@ ifeq ($(DARWIN),Darwin)
   CFLAGS   += -arch i386
   CPPFLAGS += -arch i386
   LDFLAGS  += -arch i386
+endif
+endif
+
+ifeq ($(ARCH), X64)
+ifeq ($(SUNOS),SunOS)
+  BUILD_CFLAGS += -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast
+  CFLAGS   += -m64
+  CPPFLAGS += -m64
+  LFLAGS   += -m64
 endif
 endif
 
