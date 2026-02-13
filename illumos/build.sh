@@ -86,4 +86,4 @@ BUILD_ARGS="$BUILD_ARGS -DMPT_SCSI_ENABLE=FALSE"
 
 `which build` \
 	-t ILLGCC -a X64 -b $flavour \
-	-p OvmfPkg/OvmfPkgX64.dsc $BUILD_ARGS
+	-p OvmfPkg/Bhyve/BhyveX64.dsc $BUILD_ARGS
