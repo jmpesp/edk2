@@ -71,11 +71,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 #define UINT_MAX      0xFFFFFFFF      /* Maximum unsigned int value */
 #define ULONG_MAX     0xFFFFFFFF      /* Maximum unsigned long value */
 #define CHAR_BIT      8               /* Number of bits in a char */
-#define SIZE_MAX      0xFFFFFFFF      /* Maximum unsigned size_t */
+//#define SIZE_MAX      0xFFFFFFFF      /* Maximum unsigned size_t */
 
-#define INT32_MIN   INT_MIN
-#define INT32_MAX   INT_MAX
-#define UINT32_MAX  UINT_MAX
+//#define INT32_MIN   INT_MIN
+//#define INT32_MAX   INT_MAX
+//#define UINT32_MAX  UINT_MAX
 
 //
 // Address families.
@@ -93,10 +93,11 @@ SPDX-License-Identifier: BSD-2-Clause-Patent
 //
 // Basic types mapping
 //
+#include <sys/stdint.h>
 typedef UINTN   size_t;
 typedef UINTN   off_t;
 typedef UINTN   u_int;
-typedef UINTN   intptr_t;
+//typedef UINTN   intptr_t;
 typedef INTN    ptrdiff_t;
 typedef INTN    ssize_t;
 typedef INT64   time_t;
