@@ -104,10 +104,10 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "BHYVE", "BVDSDT", 0x00000001)
                     ,, FB32)
                 QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                     0x0000000000000000, // Granularity
-                    0x000000D000000000, // Range Minimum
-                    0x000000D0000FFFFF, // Range Maximum
+                    0x0000008000000000, // Range Minimum
+                    0x00000FFFFFFFFFFF, // Range Maximum
                     0x0000000000000000, // Translation Offset
-                    0x0000000000100000, // Length
+                    0x00000F8000000000, // Length
                     ,, , AddressRangeMemory, TypeStatic)
             })
             Name (PPRT, Package ()
@@ -484,17 +484,6 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "BHYVE", "BVDSDT", 0x00000001)
                         )
                     IRQNoFlags ()
                         {1}
-                  })
-                }
-
-                Device (MOU)
-                {
-                  Name (_HID, EISAID ("PNP0F03"))
-                  Name (_CID, EISAID ("PNP0F13"))
-                  Name (_CRS, ResourceTemplate ()
-                  {
-                    IRQNoFlags ()
-                        {12}
                   })
                 }
 
@@ -1056,6 +1045,40 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "BHYVE", "BVDSDT", 0x00000001)
                         IRQNoFlags ()
                             {3}
                     })
+                }
+
+                //
+                // QEMU panic device
+                //
+                Device (PEVT)
+                {
+                    Name (_HID, "QEMU0001")  // _HID: Hardware ID
+                    Name (_CRS, ResourceTemplate ()  // _CRS: Current Resource Settings
+                    {
+                        IO (Decode16,
+                            0x0505,             // Range Minimum
+                            0x0505,             // Range Maximum
+                            0x01,               // Alignment
+                            0x01,               // Length
+                            )
+                    })
+                    OperationRegion (PEOR, SystemIO, 0x0505, One)
+                    Field (PEOR, ByteAcc, NoLock, Preserve)
+                    {
+                        PEPT,   8
+                    }
+
+                    Name (_STA, 0x0F)  // _STA: Status
+                    Method (RDPT, 0, NotSerialized)
+                    {
+                        Local0 = PEPT /* \_SB_.PCI0.S08_.PEVT.PEPT */
+                        Return (Local0)
+                    }
+
+                    Method (WRPT, 1, NotSerialized)
+                    {
+                        PEPT = Arg0
+                    }
                 }
 
                 Device (RTC)
