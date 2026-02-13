@@ -69,9 +69,9 @@ SaveCpuMpData (
   UINT32              CpusInHob;
   UINT64              Data64;
   UINT32              Index;
-  UINT32              HobBase;
+  UINT32              HobBase = 0; // XXX will always be set in the for loop for index 0, gcc doesn't know this?
   CPU_INFO_IN_HOB     *CpuInfoInHob;
-  MP_HAND_OFF         *MpHandOff;
+  MP_HAND_OFF         *MpHandOff = 0; // will always be set in the for loop for index 0, gcc doesn't know this?
   MP_HAND_OFF_CONFIG  MpHandOffConfig;
   UINTN               MpHandOffSize;
 

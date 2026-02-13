@@ -316,6 +316,10 @@ SevSnpCreateAP (
       // APs have been previously started.
       //
       MaxIndex = CpuMpData->CpuCount;
+
+      // XXX if CpuMpData->InitFlag != ApInitConfig, will not read GhcbApicIds.
+      // Set this to avoid gcc warning for "may be unsed uninitialized"
+      GhcbApicIds = 0;
     }
 
     for (Index = 0; Index < MaxIndex; Index++) {

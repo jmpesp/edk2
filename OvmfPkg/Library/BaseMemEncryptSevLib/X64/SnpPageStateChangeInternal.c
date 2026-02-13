@@ -30,7 +30,9 @@ MemoryStateToGhcbOp (
   IN SEV_SNP_PAGE_STATE  State
   )
 {
-  UINTN  Cmd;
+  // XXX gcc isn't aware that the ASSERT below means that this value will
+  // always be initialized. Set it to junk here.
+  UINTN  Cmd = 0;
 
   switch (State) {
     case SevSnpPageShared: Cmd = SNP_PAGE_STATE_SHARED;

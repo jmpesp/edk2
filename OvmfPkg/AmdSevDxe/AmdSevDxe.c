@@ -308,6 +308,10 @@ AmdSevDxeEntryPoint (
     }
   }
 
+  // XXX if `AllocateConfidentialComputingBlob` returns an error, the program
+  // crashes. initialize SnpBootDxeTable here to avoid gcc "may be
+  // uninitialized" error
+  SnpBootDxeTable = 0;
   Status = AllocateConfidentialComputingBlob (&SnpBootDxeTable);
   if (EFI_ERROR (Status)) {
     DEBUG ((

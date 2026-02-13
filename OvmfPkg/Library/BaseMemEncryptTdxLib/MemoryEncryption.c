@@ -526,7 +526,8 @@ SetOrClearSharedBit (
 {
   UINT64                        AddressEncMask;
   UINT64                        TdStatus;
-  EFI_STATUS                    Status;
+  // XXX "may be uninitialized" in DEBUG
+  EFI_STATUS                    Status = 0;
   EDKII_MEMORY_ACCEPT_PROTOCOL  *MemoryAcceptProtocol;
 
   UINT64  MapGpaRetryAddr;

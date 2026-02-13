@@ -359,7 +359,10 @@ AcceptMemoryForAPsStack (
 {
   EFI_STATUS            Status;
   EFI_PEI_HOB_POINTERS  Hob;
-  EFI_PHYSICAL_ADDRESS  PhysicalEnd;
+  // XXX set to 0, otherwise, "PhysicalEnd may not be initialized" error. It is
+  // possible that *PhysicalAddressEnd be assigned when PhysicalEnd never was
+  // written to in the loop.
+  EFI_PHYSICAL_ADDRESS  PhysicalEnd = 0; 
   EFI_PHYSICAL_ADDRESS  PhysicalStart;
   UINT64                ResourceLength;
   BOOLEAN               MemoryRegionFound;

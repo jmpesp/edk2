@@ -2162,6 +2162,10 @@ InstallAcpiTableFromAcpiSiliconHob (
         NeedToInstallTable = (VOID *)(UINTN)((EFI_ACPI_3_0_FIXED_ACPI_DESCRIPTION_TABLE *)SocEntryTable)->XDsdt;
       } else if (((EFI_ACPI_3_0_FIXED_ACPI_DESCRIPTION_TABLE *)SocEntryTable)->Dsdt != 0) {
         NeedToInstallTable = (VOID *)(UINTN)((EFI_ACPI_3_0_FIXED_ACPI_DESCRIPTION_TABLE *)SocEntryTable)->Dsdt;
+      } else {
+        // XXX avoid "may be uninitialized" error
+        // XXX picked this one? idk
+        NeedToInstallTable = 0; // (VOID *)(UINTN)((EFI_ACPI_3_0_FIXED_ACPI_DESCRIPTION_TABLE *)SocEntryTable)->Dsdt;
       }
 
       //
