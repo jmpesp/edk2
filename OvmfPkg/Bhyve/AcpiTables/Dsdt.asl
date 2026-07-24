@@ -104,11 +104,27 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "BHYVE", "BVDSDT", 0x00000001)
                     ,, FB32)
                 QWordMemory (ResourceProducer, PosDecode, MinFixed, MaxFixed, NonCacheable, ReadWrite,
                     0x0000000000000000, // Granularity
-                    0x0000008000000000, // Range Minimum
-                    0x00000FFFFFFFFFFF, // Range Maximum
+                    0x000000D000000000, // Range Minimum
+                    0x000000D0000FFFFF, // Range Maximum
                     0x0000000000000000, // Translation Offset
-                    0x00000F8000000000, // Length
+                    0x0000000000100000, // Length
                     ,, , AddressRangeMemory, TypeStatic)
+                QWordMemory (            // Descriptor for 64-bit MMIO
+                    ResourceProducer,    // bit 0 of general flags is 0
+                    PosDecode,
+                    MinFixed,            // Range is fixed
+                    MaxFixed,            // Range is Fixed
+                    Cacheable,
+                    ReadWrite,
+                    0x00000000,          // Granularity
+                    0x8000000000,        // Min
+                    0xFFFFFFFFFFF,       // Max
+                    0x00000000,          // Translation
+                    0xF8000000000,       // Range Length
+                    ,                    // ResourceSourceIndex
+                    ,                    // ResourceSource
+                    PW64                 // DescriptorName
+                    )
             })
             Name (PPRT, Package ()
             {
@@ -1071,7 +1087,7 @@ DefinitionBlock ("DSDT.aml", "DSDT", 2, "BHYVE", "BVDSDT", 0x00000001)
                     Name (_STA, 0x0F)  // _STA: Status
                     Method (RDPT, 0, NotSerialized)
                     {
-                        Local0 = PEPT /* \_SB_.PCI0.S08_.PEVT.PEPT */
+                        Local0 = PEPT /* \_SB_.PC00.S08_.PEVT.PEPT */
                         Return (Local0)
                     }
 
